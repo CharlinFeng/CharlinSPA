@@ -1,0 +1,9 @@
+
+//indexPrepare
+page.indexPrepare = function(){
+	
+	
+	
+	
+	
+}

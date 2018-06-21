@@ -1,0 +1,89 @@
+<html !DOCTYPE>
+<html manifest="/YouKa/app.appcache">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				border: none
+			}
+			
+			body,
+			html {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				overflow: hidden
+			}
+			
+			.width_100 {
+				width: 100%
+			}
+			
+			.height_100 {
+				height: 100%
+			}
+			
+			.nav_main {
+				overflow: hidden
+			}
+			
+			.iv {
+				width: 20px;
+				height: 20px;
+				align-self: center;
+				animation: iv 1s linear infinite;
+			}
+			
+			.loading_view {
+				background: #fff;
+				display: flex;
+				justify-content: center;
+				position: fixed;
+				left: 0;
+				top: 0;
+				z-index: 10000
+			}
+			
+			@keyframes iv {
+				0% {
+					transform: rotate(0deg)
+				}
+				100% {
+					transform: rotate(360deg)
+				}
+			}
+			
+			.fadeOut {
+				animation: fadeOut .3s ease-out;
+				animation-fill-mode: forwards
+			}
+			
+			@-webkit-keyframes fadeOut {
+				0% {
+					opacity: 1
+				}
+				100% {
+					opacity: 0
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="nav_main width_100 height_100"><iframe class="content width_100 height_100"></iframe>
+			<div class="loading_view width_100 height_100"><img class="iv" src="./img/iv.png"></div>
+		</div>
+	</body>
+
+</html>
+<script>
+	var reg = new RegExp("src" + '=([^&]*)');
+	var results = location.href.match(reg);
+	let src = results ? results[1] : null;
+	let content_dom = document.querySelector(".content");
+	content_dom.src = src
+</script>
