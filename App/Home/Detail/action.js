@@ -5,3 +5,7 @@ page.back = function(){
 	nav.pop()
 	// nav.dismiss()
 }
+
+page.last = function(){
+	nav.push(Last)
+}

@@ -80,9 +80,9 @@ function getLocalFile(path, closure){
 		if(closure != null) {closure(js_content);}
 	}
 	
-	ajax.onerror = function(){if(closure != null) {closure(); console.log("timeout: "+path)}}
+	ajax.onerror = function(){if(closure != null) {closure();}}
 	
-	ajax.ontimeout = function(){if(closure != null) {closure();console.log("timeout: "+path)}}
+	ajax.ontimeout = function(){if(closure != null) {closure();}}
 	
 }
 
@@ -124,20 +124,21 @@ function appDidLoad(){
 	//SPA页面Vue初始化
 	spaVuePrepare()
 	
-	let page_content = document.querySelector(".page_content")
-	
-	//加载html
-	get_path_html(RootVC,function(type,html_str){
-		
-		let dom = document.createElement("div")
-		dom.innerHTML = html_str
-		page_content.append(dom)
-		page_content.classList.add("controller")
-	})
-	
-	//加载入口页面的css,js
-	load_path_resources(RootVC, null,true)
-	
+// 	let page_content = document.querySelector(".page_content")
+// 	
+// 	//加载html
+// 	get_path_html(RootVC,function(type,html_str){
+// 		
+// 		let dom = document.createElement("div")
+// 		dom.innerHTML = html_str
+// 		page_content.append(dom)
+// 		page_content.classList.add("controller")
+// 	})
+// 	
+// 	//加载入口页面的css,js
+// 	load_path_resources(RootVC, null,true)
+	load_rootVC()
+	load_all()
 	gesture()
 }
 
@@ -295,19 +296,10 @@ function spaVuePrepare(){
 		
 		methods:{
 			
-			
-			
-			calZindexMask: function(){//pushr的zindexyy为10的倍数
-				let length = this.controllers.length - 1
-				let style_str = "z-index: " + ((length + 1) * 10 - 1) + ";";
-				console.log(style_str)
-				return style_str
-			},
-			
 			calZindex: function(index){//pushr的zindexyy为10的倍数
 				
 				let style_str = "z-index: " + (index + 1) * 10 + ";";
-				console.log(style_str)
+				
 				return style_str
 			},
 			
@@ -323,8 +315,6 @@ function spaVuePrepare(){
 				let name_lower = name.substring(0,1).toLowerCase()+name.substring(1)
 				
 				let page = window[[name_lower]]
-				
-				console.log(page)
 				
 				if(page.load != null) {
 					page.load()
@@ -343,7 +333,7 @@ function spaVuePrepare(){
 				
 				let add_type = vc==undefined ? 101 : vc.add_type
 				
-				if(add_type == 101){anim = anim_push_in}
+				if(add_type == 101 && this.controllers.length>1){anim = anim_push_in}
 				
 				if(add_type == 102){anim = anim_modal_in}
 				

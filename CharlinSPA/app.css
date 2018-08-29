@@ -14,23 +14,12 @@ button{
 	font-family: 黑体;
 }
 .controller{background: white; }
-.shadow{box-shadow: -4px 0px 8px rgba(0,0,0,0.4);}
+.shadow{box-shadow: -4px 10px 4px rgba(0,0,0,0.2);}
 .ppv{background: transparent;}
 .tab_content{height: 49px;}
 
 
-.mask_view{background: rgba(0,0,0,0.6); }
-.mask_anim_in{animation: mask_anim_in;animation-duration: 0.3s; animation-fill-mode: forwards; opacity: 0;}
-@keyframes mask_anim_in{
-	from{opacity: 0;}
-	to{opacity: 1;}
-}
-
-.mask_anim_out{animation: mask_anim_out;animation-duration: 0.3s; animation-fill-mode: forwards;  opacity: 1;}
-@keyframes mask_anim_out{
-	from{opacity: 1;}
-	to{opacity: 0;}
-}
+.mask_view{background: rgba(0,0,0,0.5); }
 
 
 
@@ -54,6 +43,7 @@ button{
 .position_absolute{ position: absolute;}
 .opacity_1{opacity: 1 !important;}
 .opacity_0{opacity: 0;}
+.visibility_hidden{visibility:hidden}
 
 .shadow_no_radius{box-shadow: 1px 8px 32px rgba(201, 206, 215, 1);}
 

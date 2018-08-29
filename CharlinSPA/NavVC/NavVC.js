@@ -105,7 +105,7 @@ define([], function() {
 		if(add_type <= 102){
 			
 			let controllers = document.querySelectorAll(".controller")
-			let pre = controllers[vue.controllers.length]
+			let pre = controllers[vue.controllers.length-1]
 			
 			this.addDom(pre)
 			vue.controllers.push(page_model)
@@ -131,8 +131,8 @@ define([], function() {
 		if(add_type <= 102){//push
 		
 			let controllers = document.querySelectorAll(".controller")
-			let pre = controllers[vue.controllers.length-1]
-			
+			let pre = controllers[controllers.length-2]
+	
 			this.removeDom(pre)
 			
 		}else{
@@ -176,6 +176,8 @@ define([], function() {
 	
 	NavVC.prototype.addDom = function(dom){
 		
+		if(dom==null){return}
+
 		let mask_dom = document.createElement("div")
 		mask_dom.classList.add("mask_view")
 		mask_dom.classList.add("cover_view")
@@ -186,11 +188,14 @@ define([], function() {
 		dom.classList.add("animated")
 		dom.classList.remove("slideInLeft")
 		dom.classList.add("slideOutLeft")
+		
+		
 	}
 	
 	NavVC.prototype.removeDom = function(dom){
 		
 		let mask_dom = dom.querySelector(".mask_view")
+		if(mask_dom == null){return}
 		mask_dom.classList.remove("fadeIn")
 		mask_dom.classList.add("fadeOut")
 		

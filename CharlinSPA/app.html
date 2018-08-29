@@ -10,7 +10,7 @@
 			<div class="page_content width_100 height_100"></div>
  
 			<transition-group name="push" tag="div" v-on:after-enter="afterEnter"  enter-class="display_none" :enter-active-class="calAnimIn()" :leave-active-class="calAnimOut()">
-					<div v-for="(controller,index) in controllers" :style="calZindex(index)" onclick="ce.stopPropagation()" :key="index" v-bind:path="controller.path"  v-html="controller.html_str" class="controller shadow animated cover_view"></div>
+					<div :class="{display_none:controllers.length-index-2>0}" :data-name="controller.name" :data-index="index" v-for="(controller,index) in controllers" :style="calZindex(index)" onclick="ce.stopPropagation()" :key="index" :path="controller.path"  v-html="controller.html_str" class="controller shadow animated cover_view"></div>
 			</transition-group>
 			
 			<transition-group name="ppv" tag="div" enter-active-class="jackInTheBox" leave-active-class="rollOut">

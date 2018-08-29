@@ -10,12 +10,34 @@ function PageMaker(name, page_model){
 
 let Home = {name: "Home", path: "/Home/"} 
 let Detail = {name: "Detail", path: "/Home/Detail/"} 
+let Last = {name: "Last", path: "/Home/Detail/Last/"} 
 
 let RootVC = Home
 
-let page_models = [Home,Detail]
+let page_models = [Home,Detail, Last]
 
 // let page_models = [ CheXianShiSuan,MaiCheXian,MaiCheXian1, ShouJiChongZhi]
+
+function load_rootVC(){
+	
+	let page_model = RootVC
+	
+	//加载html
+	get_path_html(page_model,function(type,html_str){
+		
+		//加载入口页面的css,js
+		load_path_resources(page_model,function(){
+			
+			nav.push(page_model)
+			
+			setTimeout(function(){
+				// delete page_model.name;
+				delete page_model.path;
+			},100)
+			
+		},false)
+	})
+}
 
 function load_all(){
 	
@@ -28,6 +50,7 @@ function load_all(){
 			
 			//加载入口页面的css,js
 			load_path_resources(page_model,function(){
+				
 				
 				setTimeout(function(){
 					// delete page_model.name;
