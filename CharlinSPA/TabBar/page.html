@@ -1,0 +1,44 @@
+<div class="tab_controller page_content" v-cloak>
+	
+	<div class="tab_main" v-html="html">
+	
+	</div>
+	
+	<div class="tab_bar">
+
+		<div class="bottom display_flex width_100">
+			<div class="bottom_content flex display_flex flex_1">
+				<!--tab_item_selected切换字体颜色样式     normal未选中样式   selected选中样式--> 
+				
+				<div class="youhui flex_1 display_flex align_items_center justify_center position_relative" :class="{tab_item_selected: currentIndex == 0}">
+					<!--color1171ff切换字体颜色样式-->
+					<div class="youhui_content display_flex flex_column align_items_center ">
+						<div class="youhui_img youhui_img_selected youhui_img_normal"></div>
+						<span>优惠</span>
+					</div>
+					<button class="tab_bar_item" data-index="0"></button>
+				</div>
+				
+				<div class="faxian flex_1 display_flex align_items_center justify_center position_relative" :class="{tab_item_selected: currentIndex == 1}">
+					<div class="faxian_content flex_column display_flex align_items_center">
+						<div class="faxian_img faxian_img_normal faxian_img_selected"></div>
+						<span>发现</span>
+					</div>
+					<button class="tab_bar_item" data-index="1"></button>
+				</div>
+				
+				<div class="wode flex_1 display_flex align_items_center justify_center position_relative" :class="{tab_item_selected: currentIndex == 2}">
+					<div class="wode_content display_flex flex_column align_items_center">
+						<div class="wode_img wode_img_normal wode_img_selected"></div>
+						<span>我的</span>
+					</div>
+					<button class="tab_bar_item" data-index="2"></button>
+				</div>
+				
+			</div>
+		</div>
+
+	</div>	
+	
+</div>	
+

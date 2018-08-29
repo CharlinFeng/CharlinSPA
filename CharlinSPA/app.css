@@ -1,4 +1,4 @@
-*{margin: 0; padding: 0; border: none;-webkit-backface-visibility: hidden !important;backface-visibility: hidden !important; -webkit-user-select: none !important;}
+*{margin: 0; padding: 0; border: none;-webkit-overflow-scrolling: touch;-webkit-backface-visibility: hidden !important;backface-visibility: hidden !important; -webkit-user-select: none !important;-webkit-backface-visibility: hidden;  backface-visibility: hidden;   -webkit-transform-style:flat;  transform-style: flat;}
 body,html{width: 100%; height: 100%; display: flex; background: white;}
 input, textarea{-webkit-appearance: @none;}
 html,body{-webkit-text-size-adjust: 100%;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
@@ -7,13 +7,33 @@ input,textarea {-webkit-user-select: auto !important;}
 ol, ul {list-style: none;}
 a:hover,button:hover{cursor: pointer;}
 
-.controller{background: white;}
+button{
+	background: none;
+}
+.amount{
+	font-family: 黑体;
+}
+.controller{background: white; }
+.shadow{box-shadow: -4px 0px 8px rgba(0,0,0,0.4);}
 .ppv{background: transparent;}
+.tab_content{height: 49px;}
 
-/*layui的iframe弹窗修正*/
-.layui-layer-title{display: none;}
-.layui-layer-content,.layui-layer-content iframe{height: 100% !important;}
-.blur{filter: blur(12px);}
+
+.mask_view{background: rgba(0,0,0,0.6); }
+.mask_anim_in{animation: mask_anim_in;animation-duration: 0.3s; animation-fill-mode: forwards; opacity: 0;}
+@keyframes mask_anim_in{
+	from{opacity: 0;}
+	to{opacity: 1;}
+}
+
+.mask_anim_out{animation: mask_anim_out;animation-duration: 0.3s; animation-fill-mode: forwards;  opacity: 1;}
+@keyframes mask_anim_out{
+	from{opacity: 1;}
+	to{opacity: 0;}
+}
+
+
+
 
 /* 公共样式 */
 #content {background-color: #f3f3f3; width: 100%; height: 100%;}
@@ -44,12 +64,13 @@ a:hover,button:hover{cursor: pointer;}
 .obj_contain{object-fit: contain;}
 .display_none{display: none !important;}
 .layui-layer{background: transparent !important;}
+.cover_view{width: 100%; height: 100%; position: absolute; left: 0; top: 0;}
 
-.animated{animation-duration: 0.6s !important;}
+.slideOutLeft{animation-timing-function: ease-in-out !important;}
 
-[v-cloak]{  
-    display: none !!important;  
-}
+.animated{animation-duration: 0.4s !important;}
+
+[v-cloak]{display: none !important;}
 
 .zindex10{z-index: 10;}
 
@@ -81,6 +102,8 @@ a:hover,button:hover{cursor: pointer;}
 
 .weui-toast{padding: 0 10px !important; width: auto !important; min-width: 120px !important; max-width: 80% !important;}
 
+.launch_img{}
+
 
 
 .fadeIn{animation: fadeIn 0.15s linear !important;display: flex !important;-webkit-animation: fadeIn 0.15s linear !important;}
@@ -92,6 +115,128 @@ a:hover,button:hover{cursor: pointer;}
 	0% {opacity: 0;}; 
 	100% {opacity: 1};
 }
+
+
+
+/*页面相同部分的header部分*/
+.header_all_blank{
+	min-height: 62px;
+}
+.header{
+	position: fixed;
+	top: 0;
+	height: 62px;
+	background-image: linear-gradient(90deg, 
+		#11b9f0 0%, 
+		#048aed 100%), 
+	linear-gradient(
+		#ffffff, 
+		#ffffff);
+}
+.header_blank{
+	height: 15px;
+}
+.header_content{
+	height: 47px;
+}
+.fanhui{
+	z-index: 1;
+	left: 15px;
+}
+.fanhui_pic{
+	width: 10px;
+	height: 17px;
+}
+
+.fanhui_btn{
+	top: -13px;
+    left: -10px;
+	width: 35px;
+	height: 47px;
+}
+.header_sub{
+	font-size: 16px;
+	color: #333333;
+}
+.header_area{
+	font-size: 16px;
+	color: #ffffff
+}
+
+
+/*添加加油卡的顶部*/
+.tianjia_k .header{
+	position: relative;
+	top: 0;
+	left: 0;
+	background-image: linear-gradient(90deg, 
+		#11b9f0 0%, 
+		#048aed 100%), 
+	linear-gradient(
+		#ffffff, 
+		#ffffff);
+	background-blend-mode: normal, 
+		normal;
+}
+.tianjia_k .last{
+	width: 10px;
+	height: 17px;
+}
+/*last_btn返回按钮*/
+.tianjia_k .last_btn{
+    width: 40px;
+    height: 46px;
+    top: -16px;
+    left: -14px;
+}
+.tianjia_k .header_blank{
+	height: 16px;
+}
+.tianjia_k .header_content{
+	color: #fff;
+	height: 46px;
+	margin-left: 15px;
+	margin-right: 16px;
+	justify-content: space-between;	
+}
+.tianjia_k .daiban{
+	height: 46px;
+}
+.tianjia_k .daiban_pic{
+	width: 16px;
+	height: 13px;
+}
+.tianjia_k .title{
+	margin-left: 50px;
+	font-size: 16px;
+}
+.tianjia_k .explain{
+	font-size: 13px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

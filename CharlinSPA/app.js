@@ -1,74 +1,57 @@
 
 // APP_VERSION 控制CharlinSPA.css
 let APP_VERSION = "1.0"
-let APP_DEBUG = true
+let APP_DEBUG = false
 let APP_NAME = "CharlinSPA"
 let BASE_URL_FRAMEWORKS="/"+APP_NAME+"/FrameWorks"
 let BASE_URL_APP="/"+APP_NAME+"/App" 
 
+let ua = navigator.userAgent; 
+
+window.ios = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+
+
 //动态引入页面js cache_need_force:如果有缓存的话,强制使用缓存
 function importJS(path,loadClosure,cache_need_force=false){
 
-	let js_content = localStorage[[path]]
-
-	var body = document.body
-	var script = document.createElement('script')
+	let body = document.body
+	let script = document.createElement('script')
 
 	script.type = 'text/javascript'
+
+	script.src = path
 	
-	if((cache_need_force  && js_content != null) || (js_content != null &&　APP_DEBUG == false)) {
+	body.appendChild(script);
 
-		script.innerHTML = js_content
-		body.appendChild(script);
+	script.onload = function(e){
 
-		if(loadClosure != undefined) {loadClosure()}
+		if(loadClosure != undefined) {loadClosure(e)}
 
-	}else {
-
-		script.src = path
-		body.appendChild(script);
-
-		script.onload = function(e){
-
-			if(loadClosure != undefined) {loadClosure(e)}
-
-			getLocalFile(path)
-		}
+		getLocalFile(path)
 	}
+	
 }
 
 
 //动态引入页面css
 function importCSS(path,loadClosure,cache_need_force=false){
 	
-	let css_content = localStorage[[path]]
 	let head = document.querySelector("head")
-	
-	if((cache_need_force  && js_content != null) || (css_content != null &&　APP_DEBUG == false)) {
 
-		let style = document.createElement("style")
-		style.type = 'text/css'
+	let link = document.createElement('link');
+	link.rel = 'stylesheet';
+	link.type = 'text/css';
+	link.href = path
 
-		style.innerHTML = css_content
-		head.appendChild(style);
+	head.appendChild(link);
+
+	link.onload = function(){
+
 		if(loadClosure != undefined) {loadClosure()}
 
-	}else{
-
-		var link = document.createElement('link');
-		link.rel = 'stylesheet';
-		link.type = 'text/css';
-		link.href = path
-
-		head.appendChild(link);
-
-		link.onload = function(){
-
-			if(loadClosure != undefined) {loadClosure()}
-
-			getLocalFile(path)
-		}
+		getLocalFile(path)
 	}
+
 }
 
 
@@ -76,7 +59,7 @@ function importCSS(path,loadClosure,cache_need_force=false){
 function getLocalFile(path, closure){
 
 	//步骤一:创建异步对象
-	var ajax = new XMLHttpRequest();
+	let ajax = new XMLHttpRequest();
 	//步骤二:设置请求的url参数,参数一是请求的类型,参数二是请求的url,可以带参数,动态的传递参数starName到服务端
 
 	ajax.open('get',path,true);
@@ -91,11 +74,10 @@ function getLocalFile(path, closure){
 	ajax.onload = function(){
 		
 		let js_content = ajax.responseText
-		
+		js_content = js_content.replace("\\r","")
+		js_content = js_content.replace("\\n","")
+		js_content = js_content.replace("\\t","")
 		if(closure != null) {closure(js_content);}
-	　　
-		//缓存　
-		localStorage[[path]] = js_content
 	}
 	
 	ajax.onerror = function(){if(closure != null) {closure(); console.log("timeout: "+path)}}
@@ -107,7 +89,11 @@ function getLocalFile(path, closure){
 
 let RequireJS = BASE_URL_FRAMEWORKS+"/requirejs/require.min.js"
 let mainJS = BASE_URL_FRAMEWORKS+"/requirejs/main.js"
-
+let AppPageJS = "./app.page.js"
+let NavVCKey = "./NavVC/NavVC.js"
+let WeuiCssKey = "css!FrameWorks/weui/weui.min"
+let MobileJS = "./app.mobile.js"
+let CharlinSPACSSKey = "css!/"+APP_NAME+"/CharlinSPA/app.css"
 
 //引入RequireJS
 importJS(RequireJS,function(){
@@ -115,14 +101,18 @@ importJS(RequireJS,function(){
 	//再引入main.js
 	importJS(mainJS,function(){
 		
-		var app_arr = [VueKey, CoreSVPKey, CoreAlertViewKey, CoreActionSheetKey,CorePageManagerKey, 
-		CharlinSPACSSKey, CoreExtensionKey, NavVCKey, AnimateCssKey]
+		let app_arr = [VueKey, WEUIKey,FastClickKey, WeuiCssKey, CoreSVPKey, CoreActionSheetKey,AppPageJS, 
+		CharlinSPACSSKey, CoreExtensionKey, NavVCKey, AnimateCssKey, AppHttpKey, SwiperKey, CoreArchiveKey, 
+		CorePickerKey,MobileJS, CoreAlertViewKey, CoreListKey]
 
-		require(app_arr, function(Vue,page_html_require) {
+		require(app_arr, function(Vue,weui,FastClick) {
 			
 			window.Vue = Vue
+			window.weui = weui
 			
 			appDidLoad()
+		
+			FastClick.attach(document.body);
 		})
 	})
 })
@@ -136,105 +126,155 @@ function appDidLoad(){
 	
 	let page_content = document.querySelector(".page_content")
 	
-	//加载入口页面html
-	let rootVC = Home
-	let v = rootVC.v
-	let path = rootVC.path
-	let page_path = BASE_URL_APP + path
-	let name = rootVC.name
-	
-	get_path_html(name,page_path,v,function(type,html_str){
-		page_content.innerHTML = html_str
+	//加载html
+	get_path_html(RootVC,function(type,html_str){
+		
+		let dom = document.createElement("div")
+		dom.innerHTML = html_str
+		page_content.append(dom)
+		page_content.classList.add("controller")
 	})
 	
 	//加载入口页面的css,js
-	load_page_resources(name,page_path, v, null)
+	load_path_resources(RootVC, null,true)
+	
+	gesture()
+}
+
+function gesture(){
+	
+	let body = document.body
+	
+	let s_time = 0
+	let e_time = 0
+	
+	let startX = 0
+	let endX = 0
+	
+	body.ontouchstart = function(e){
+		
+		startX = e.changedTouches[0].pageX
+		if(startX>=20){return}
+		s_time = Date.parse(new Date())
+	}
+
+	body.ontouchend = function(e){
+		
+		if(startX>=20){return}
+		
+		e_time = Date.parse(new Date())
+		
+		endX = e.changedTouches[0].pageX
+		
+		let resT = e_time - s_time
+		let resX = endX - startX
+		
+		
+		
+		if(resT>0){return}
+		if(resX<=20) {return}
+		
+		nav.pop()
+		
+	}
 }
 
 
+//填充内容  closure回调: 101本地数据, 102异步数据
+function get_path_html(page_model, closure){
+	
+	//加载入口页面html
+	let path = page_model.path
+	let name = page_model.name
+	let tabbar_page_path = "/" + APP_NAME + "/CharlinSPA/" + name + "/"
+	let page_path = name == "TabBar" ? tabbar_page_path : BASE_URL_APP + path
+	
+	let path_full = page_path + "page.html?t="+Date.parse(new Date())
+	
+	//异步读取本地html文件
+	getLocalFile(path_full,function(html_get){
+		
+		let name_lower = name.substring(0,1).toLowerCase()+name.substring(1)
+		
+		html_get = html_get.replace(/\page/g,name_lower)
+		
+		//记录html
+		page_model.html_str = html_get
+		
+		if(closure != null) {closure(102,html_get)} 
+	})
+		
+		
+	
+}
+
+
+
 //加载页面的css,js 获取上一个页面传递的数据
-function load_page_resources(name,page_path, v, data){
+function load_path_resources(page_model, closure, create_dom=true){
+	
+	//加载入口页面html
+	let path = page_model.path
+	let name = page_model.name
+	let tabbar_page_path = "/" + APP_NAME + "/CharlinSPA/" + name + "/"
+	let page_path = name == "TabBar" ? tabbar_page_path : BASE_URL_APP + path
 
 	let arr = ["index", "vue", "navbar", "host", "list", "other", "action"]
-	//加载css
-	let css_path = "css!"+page_path + "page.css"
 	
-	var page_arr = arr.map(function(m,index,arr){return "text!"+page_path+m+".js"})
+	let t = Date.parse(new Date())
+	
+	//加载css
+	let css_path = "css!"+page_path + "page.css?t="+t
+	
+	let page_arr = arr.map(function(m,index,arr){return "text!"+page_path+m+".js?t="+t})
 	
 	page_arr.push(css_path)
 	
-	var body = document.body
-	
-	require(page_arr, function(str0,str1,str2,str3,str4,str5,str6,css_import) {
-		
-		var name_space_str = "window."+name+"={} \n"
-		
-		//传递数据
-		let data_obj = data || {}
-		let data_str = JSON.stringify(data_obj)
-		
-		let data_js = "page.data=JSON.parse('"+data_str+"')"
-		
-		name_space_str += data_js
-		
+	require(page_arr, function(str0,str1,str2,str3,str4,str5,str6,css_str) {
+		let name_lower = name.substring(0,1).toLowerCase()+name.substring(1)
+		let name_space_str = "window."+name_lower+"={}; page.data='$data'; \n"
+
 		for (let i=0;i<7;i++) {
 			
 			name_space_str += eval("str"+i) + "\n"
 		}
 		
 		//调用
-		var methods_cal_str = "\n"
+		let methods_cal_str = "\n"
 		let methods = ["vue","navBar","host","list","other","index"]
-		methods.forEach(function(m,i,a){methods_cal_str += "page."+m+"Prepare();"})
+		methods.forEach(function(m,i,a){
+			let func_str = "page."+m+"Prepare"
+			let func_str_full = "if("+func_str+"!= null){"+func_str + "();};"
+			methods_cal_str +=  func_str_full
+		})
 		name_space_str += methods_cal_str
-		name_space_str = name_space_str.replace(/\page/g,name)
-		// console.log(name_space_str)
+		
+		//ios直接调用load
+		let load_call_for_ios_str = "\n if(ios && page.load != null){page.load()};"
+		name_space_str += load_call_for_ios_str
+		name_space_str = name_space_str.replace(/\page/g,name_lower)
+		// css_str = css_str.replace(/ /g, "")
+		let js_str = name_space_str
+
+		
+		//记录script_dom
 		let script_dom = document.createElement("script")
-		script_dom.type = 'text/javascript'
-		script_dom.setAttribute("name", name)
-		script_dom.innerHTML = name_space_str
-		body.appendChild(script_dom)
+		script_dom.innerHTML = js_str
+		script_dom.setAttribute("name",name)
+		page_model.script_dom = script_dom
+		page_model.js_str = js_str
+		
+		
+		if(closure != null) {closure(js_str)}
+		
+		if(create_dom){
+			
+//			document.head.appendChild(style_dom)
+			
+			document.body.appendChild(script_dom)
+		}
 	})
 }
-
-
-
-
-
-
-//填充内容  closure回调: 101本地数据, 102异步数据
-function get_path_html(name,page_path, v, closure){
-	
-	let path_version_key = page_path + "_v"
-	
-	let v_cache = localStorage.getItem(path_version_key)
-	let html_content_cache = localStorage.getItem(page_path)
-	
-	if(closure != null) {closure(101,html_content_cache)}
-	
-	let path_full = page_path + "page.html"
-	
-	
-	if(v_cache == null || html_content_cache==null || v_cache<v || APP_DEBUG){
-		// console.log("没有缓存")
-		//异步读取本地html文件
-		getLocalFile(path_full,function(html_get){
-			
-			html_get = html_get.replace(/\page/g,name)
-			
-			if(closure != null) {closure(102,html_get)} 
-		})
-		
-		//存入版本号
-		localStorage.setItem(path_version_key, v)
-		
-	}else{
-		// console.log("有缓存")
-		//有缓存,也要再更新一下最新的数据到缓存
-		getLocalFile(path_full,null)
-	}
-}
-
 
 //SPA页面的vue准备
 function spaVuePrepare(){
@@ -249,21 +289,59 @@ function spaVuePrepare(){
 			ppvs:[], //ppvs栈
 			top_vc_model:null,
 			
+			ios: ios,
 			
 		},
 		
 		methods:{
 			
-			calAnimIn: function(){
+			
+			
+			calZindexMask: function(){//pushr的zindexyy为10的倍数
+				let length = this.controllers.length - 1
+				let style_str = "z-index: " + ((length + 1) * 10 - 1) + ";";
+				console.log(style_str)
+				return style_str
+			},
+			
+			calZindex: function(index){//pushr的zindexyy为10的倍数
 				
-				let anim_push_in = "slideInRight"
-				let anim_modal_in = "slideInUp"
+				let style_str = "z-index: " + (index + 1) * 10 + ";";
+				console.log(style_str)
+				return style_str
+			},
+			
+			afterEnter: function(){
 				
-				var anim = ""
+				if(ios){return}
 				
 				let vc = this.controllers[this.controllers.length-1]
 				
-				let add_type = vc==undefined ? 101 : vc.page_model.add_type
+				if(vc == null) {return}
+				
+				let name = vc.name	
+				let name_lower = name.substring(0,1).toLowerCase()+name.substring(1)
+				
+				let page = window[[name_lower]]
+				
+				console.log(page)
+				
+				if(page.load != null) {
+					page.load()
+				}
+				
+			},
+			
+			calAnimIn: function(){
+				//slideInRight
+				let anim_push_in = "slideInRight flex"
+				let anim_modal_in = "slideInUp"
+				
+				let anim = ""
+				
+				let vc = this.controllers[this.controllers.length-1]
+				
+				let add_type = vc==undefined ? 101 : vc.add_type
 				
 				if(add_type == 101){anim = anim_push_in}
 				
@@ -274,11 +352,11 @@ function spaVuePrepare(){
 			},
 			
 			calAnimOut: function(){
-				
+				//slideOutRight
 				let anim_push_in = "slideOutRight"
 				let anim_modal_in = "slideOutDown"
 				
-				var anim = ""
+				let anim = ""
 				
 				let m = this.top_vc_model
 				

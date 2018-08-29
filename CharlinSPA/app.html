@@ -2,20 +2,26 @@
 <html>
 	<head><meta charset="UTF-8"></head>
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+	
 	<body>
+		
 		<div class="spa width_100 height_100 overflow_hidden position_relative" v-cloak>
+			
 			<div class="page_content width_100 height_100"></div>
-			<transition-group name="push" tag="div" :enter-active-class="calAnimIn()" :leave-active-class="calAnimOut()">
-				<div onclick="ce.stopPropagation()" v-for="(controller,index) in controllers" :key="index" v-bind:path="controller.path" v-html="controller.html" class="controller animated position_absolute left_0 top_0 width_100 height_100 zindex10"></div>
-			</transition-group>
-			<!--jackInTheBox bounceInDown rollIn-->
-			<transition-group name="ppv" tag="div" enter-active-class="jackInTheBox" leave-active-class="rollOut">
-				<div onclick="ce.stopPropagation()" v-for="(ppv,index) in ppvs" :key="index" v-bind:path="ppv.path" v-html="ppv.html" class="ppv animated position_absolute left_0 top_0 width_100 height_100 zindex10"></div>
+ 
+			<transition-group name="push" tag="div" v-on:after-enter="afterEnter"  enter-class="display_none" :enter-active-class="calAnimIn()" :leave-active-class="calAnimOut()">
+					<div v-for="(controller,index) in controllers" :style="calZindex(index)" onclick="ce.stopPropagation()" :key="index" v-bind:path="controller.path"  v-html="controller.html_str" class="controller shadow animated cover_view"></div>
 			</transition-group>
 			
+			<transition-group name="ppv" tag="div" enter-active-class="jackInTheBox" leave-active-class="rollOut">
+				<div onclick="ce.stopPropagation()" v-for="(ppv,index) in ppvs" :key="index" v-bind:path="ppv.path" v-html="ppv.html_str" class="ppv animated cover_view zindex10"></div>
+			</transition-group>
 			
 		</div>
+		
 	</body>
+	   
 </html>
+
 <script src="./app.js"></script>
 

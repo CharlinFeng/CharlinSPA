@@ -1,0 +1,70 @@
+
+/* 系统默认样式，不要删除 */
+.tab_controller{width: 100%; height: 100%;overflow: hidden;position: relative;}
+.tab_main{width: 100%; height: 100%;overflow: hidden;}
+.tab_bar{width: 100%; height: 49px;display: flex; flex-direction: row;position: absolute;left: 0; bottom: 0;z-index: 10;}
+.tab_item{ height: 100%;  flex: 1; cursor: pointer;  line-height:49px; text-align: center;position: relative;}
+.tab_item_content{width: 100%; height: 100%; overflow: hidden;}
+.tab_bar_item{width: 100%; height: 100%;position: absolute;left: 0;top: 0;background: transparent;}
+
+
+
+
+
+
+button{
+	background: none;
+}
+.bottom{
+	background-color: #ffffff;
+	box-shadow: 0px -4px 4px 0px 
+		rgba(0, 0, 0, 0.03);
+	height: 50px;
+}
+.youhui_img{
+	width: 23px;
+	height: 21px;
+}
+.faxian_img{
+	width: 24px;
+	height: 18px;
+	margin-bottom: 5px;
+}
+.wode_img{
+	width: 17px;
+	height: 19px;
+}
+.bottom_content{
+	font-size: 12px;
+	color: #a7a7a7;
+}
+/*tab_item_selected切换字体颜色样式     normal未选中样式   selected选中样式 */
+.tab_item_selected{
+	color: #1171ff !important;
+}
+.youhui_img_normal{
+	background: url("/JiaYou/Bundle/TabBar/youhui_huise@3x.png") no-repeat;
+	background-size: 100% 100%;
+}
+.tab_item_selected .youhui_img_selected{
+	background: url("/JiaYou/Bundle/TabBar/youhui_selected@3x.png") no-repeat;
+	background-size: 100% 100%;
+}
+
+.faxian_img_normal{
+	background: url("/JiaYou/Bundle/TabBar/faxian@3x.png") no-repeat;
+	background-size: 100% 100%;
+}
+.tab_item_selected .faxian_img_selected{
+	background: url("/JiaYou/Bundle/TabBar/faxian_selected@3x.png") no-repeat;
+	background-size: 100% 100%;
+}
+
+.wode_img_normal{
+	background: url("/JiaYou/Bundle/TabBar/wode@3x.png") no-repeat;
+	background-size: 100% 100%;
+}
+.tab_item_selected .wode_img_selected{
+	background: url("/JiaYou/Bundle/TabBar/wode_selected@3x.png") no-repeat;
+	background-size: 100% 100%;
+}
