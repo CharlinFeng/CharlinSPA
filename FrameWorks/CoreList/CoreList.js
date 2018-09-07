@@ -1,6 +1,6 @@
 
-let html_ResView = 'text!/YouKa/FrameWorks/CoreList/ResView/ResView.html'
-let css_ResView = 'css!/YouKa/FrameWorks/CoreList/ResView/ResView.css'
+let html_ResView = 'text!FrameWorks/CoreList/ResView/ResView.html'
+let css_ResView = 'css!FrameWorks/CoreList/ResView/ResView.css'
 
 define([MinRefresh_Applet_Key,MinRefresh_css_Key, MinRefresh_css_Applet_Key,html_ResView,css_ResView], function(MiniRefreshTools,c1,c2,html_ResView,css) {
 	
