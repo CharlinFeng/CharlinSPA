@@ -19,7 +19,7 @@ button{
 .tab_content{height: 49px;}
 
 
-.mask_view{background: rgba(0,0,0,0.5); }
+.mask_view{background: rgba(0,0,0,0.5); animation-duration: 0.4s !important;}
 
 
 
@@ -58,7 +58,7 @@ button{
 
 .slideOutLeft{animation-timing-function: ease-in-out !important;}
 
-.animated{animation-duration: 0.4s !important;}
+.controller{animation-duration: 0.4s !important;}
 
 [v-cloak]{display: none !important;}
 
