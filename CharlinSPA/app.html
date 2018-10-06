@@ -26,7 +26,13 @@
 				v-on:leave-cancelled="leaveCancelled"
 				mode="out-in"
 			>
-				<div :class="{display_none:controllers.length-index-2>0}" :data-name="controller.name" :data-index="index" v-for="(controller,index) in controllers" :style="calZindex(index)" onclick="ce.stopPropagation()" :key="index" :path="controller.path"  v-html="controller.html_str" class="controller shadow animated cover_view"></div>
+				<div :class="{display_none:controllers.length-index-2>0}" :data-name="controller.name" :data-index="index" v-for="(controller,index) in controllers" :style="calZindex(index)" onclick="ce.stopPropagation()" :key="index" :path="controller.path"  class="controller shadow animated cover_view position_relative">
+					
+					<div class="loading_view cover_view"></div>
+			
+					<div v-show="controller.lazy== null" v-html="controller.html_str" class="controllerMain cover_view animated fadeIn zindex10"></div>
+				
+				</div>
 			
 			</transition-group>
 			

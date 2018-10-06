@@ -20,7 +20,7 @@ page.actionPrepare = function(){
 			
 			//加载对应的tab页面
 			page.load_path_files()
-
+			
 			
 		},false)
 		

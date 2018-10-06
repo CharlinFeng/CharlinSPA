@@ -9,7 +9,7 @@ page.vuePrepare = function(){
 		data:{
 			
 			html:"",
-			viewControllers: [Home, FaXian, WoDe],
+			viewControllers: tabcontrollers,
 			
 			lastIndex: null,
 			currentIndex: 0,
@@ -27,9 +27,5 @@ page.vuePrepare = function(){
 		page.actionPrepare()
 		
 	})
-	
-	setTimeout(function(){
-	    launchOver()
-	},100)
-	
+
 }

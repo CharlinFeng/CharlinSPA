@@ -5,9 +5,12 @@ let APP_NAME = "CharlinSPA"
 let BASE_URL_FRAMEWORKS = "/" + APP_NAME + "/FrameWorks"
 let BASE_URL_APP = "/" + APP_NAME + "/App"
 
+if(typeof System == "undefined") {window.System = {};System.Both = "Both";System.iOS = "iOS";System.Android = "Android";}
+
 let ua = navigator.userAgent;
 
-window.ios = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+let is_ios = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端 
+window.system = is_ios ? System.iOS : System.Android
 
 //动态引入页面js cache_need_force:如果有缓存的话,强制使用缓存
 function importJS(path, loadClosure, cache_need_force = false) {
@@ -109,7 +112,7 @@ importJS(RequireJS, function() {
 	//再引入main.js
 	importJS(mainJS, function() {
 
-		let app_arr = [VueKey, WEUIKey, FastClickKey, WeuiCssKey, CoreSVPKey, CoreActionSheetKey, AppPageJS,
+		let app_arr = [VueKey, WEUIKey, WeuiCssKey, CoreSVPKey, CoreActionSheetKey, AppPageJS,
 			CharlinSPACSSKey, CoreExtensionKey, NavVCKey, AnimateCssKey, AppHttpKey, SwiperKey, CoreArchiveKey,
 			CorePickerKey, MobileJS, CoreAlertViewKey, CoreListKey
 		]
@@ -121,7 +124,6 @@ importJS(RequireJS, function() {
 
 			appDidLoad()
 
-			FastClick.attach(document.body);
 		})
 	})
 })
@@ -133,7 +135,6 @@ function appDidLoad() {
 	spaVuePrepare()
 
 	load_rootVC()
-	load_all()
 	gesture()
 }
 
@@ -249,10 +250,6 @@ function load_path_resources(page_model, closure, create_dom = true) {
 			methods_cal_str += func_str_full
 		})
 		name_space_str += methods_cal_str
-
-		//ios直接调用load
-		let load_call_for_ios_str = "\n if(ios && page.load != null){page.load()};"
-		name_space_str += load_call_for_ios_str
 		name_space_str = name_space_str.replace(/\page/g, name_lower)
 		// css_str = css_str.replace(/ /g, "")
 		let js_str = name_space_str
@@ -290,14 +287,19 @@ function spaVuePrepare() {
 			ppvs: [], //ppvs栈
 			top_vc_model: null,
 
-			ios: ios,
-
 		},
 
 		methods: {
 			
 			beforeEnter: function(el) {
+				let index = this.controllers.length-1
+				let vc = this.controllers[index]	
+				if(vc == null) {return}
 				
+				if(vc.lazy != System.Both && vc.lazy != system) {
+					vc.lazy = null
+				}
+				if(vc.lazy_cache != null) {vc.lazy=vc.lazy_cache}
 			},
 			
 			enter: function(el, done) {
@@ -305,7 +307,8 @@ function spaVuePrepare() {
 			},
 			
 			afterEnter: function(el) {
-				let vc = this.controllers[this.controllers.length-1]	
+				let index = this.controllers.length-1
+				let vc = this.controllers[index]	
 				if(vc == null) {return}
 				let name = vc.name	
 				let name_lower = name.substring(0,1).toLowerCase()+name.substring(1)
@@ -313,6 +316,9 @@ function spaVuePrepare() {
 				if(page.viewDidAppear != null) {
 					page.viewDidAppear()
 				}
+				
+				if(vc.lazy != null){ vc.lazy_cache = vc.lazy; vc.lazy=null }
+				
 			},
 			
 			enterCancelled: function(el) {
@@ -321,9 +327,11 @@ function spaVuePrepare() {
 			
 			beforeLeave: function(el) {
 				
+				
 			},
 			
 			leave: function(el, done) {
+				
 				setTimeout( function(){done() },600)
 			},
 			
@@ -333,6 +341,7 @@ function spaVuePrepare() {
 				let name = vc.name	
 				let name_lower = name.substring(0,1).toLowerCase()+name.substring(1)
 				let page = window[[name_lower]]
+				if(page == null) {return}
 				if(page.viewDidAppear != null) {
 					page.viewDidAppear()
 				}

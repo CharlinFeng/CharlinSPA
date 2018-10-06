@@ -23,11 +23,6 @@ page.load_first_page = function () {
 		
 		load_path_resources(page_model, function(){
 			
-			//加载所有页面
-		    setTimeout(function(){
-		         load_all() 
-		    },200)
-		    
 		}, true)
 
 	})

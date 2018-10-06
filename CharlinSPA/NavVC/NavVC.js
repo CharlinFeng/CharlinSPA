@@ -18,8 +18,26 @@ define([], function() {
 		window.location.href = "charlin://restart"
 	}
 	
+	
 	//push
 	NavVC.prototype.push = function(page_model, data=null, bartype = StatusBarType.white){
+		
+		if(page_model.html_str == null) {
+			
+			let weak_self = this
+		
+			load(page_model, function(page_model_new){
+			
+				weak_self.push0(page_model_new, data, bartype)
+			})
+			
+		}else {
+			this.push0(page_model, data, bartype)
+		}
+	}
+	
+	//push
+	NavVC.prototype.push0 = function(page_model, data=null, bartype = StatusBarType.white){
 		
 		this.add(101,page_model,data,bartype)
 	}
@@ -146,7 +164,14 @@ define([], function() {
 		
 		if(length <= 0) {return}
 		
-		let name = vcs[length-1].name
+		let vc = vcs[length-1]
+		
+		//干掉mvc
+		delete vc.html_str
+		delete vc.js_str
+		delete vc.script_dom
+		
+		let name = vc.name
 		
 		if(index==0){
 			

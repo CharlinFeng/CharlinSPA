@@ -19,10 +19,8 @@ button{
 .tab_content{height: 49px;}
 
 
-.mask_view{background: rgba(0,0,0,0.5); animation-duration: 0.4s !important;}
-
-
-
+.mask_view{background: rgba(0,0,0,0.5); animation-duration: 0.4s !important; z-index: 20;}
+.controllerMain{animation-duration: 0.5s !important; background: white;}
 
 /* 公共样式 */
 #content {background-color: #f3f3f3; width: 100%; height: 100%;}
@@ -93,18 +91,6 @@ button{
 .weui-toast{padding: 0 10px !important; width: auto !important; min-width: 120px !important; max-width: 80% !important;}
 
 .launch_img{}
-
-
-
-.fadeIn{animation: fadeIn 0.15s linear !important;display: flex !important;-webkit-animation: fadeIn 0.15s linear !important;}
-@-webkit-keyframes fadeIn {
-	0% {opacity: 0;}; 
-	100% {opacity: 1};
-}
-@keyframes fadeIn {
-	0% {opacity: 0;}; 
-	100% {opacity: 1};
-}
 
 
 
