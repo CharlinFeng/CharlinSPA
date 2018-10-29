@@ -204,6 +204,13 @@ define([], function() {
 		if(dom==null){return}
 
 		let mask_dom = document.createElement("div")
+		mask_dom.addEventListener("click",function(e){
+			
+			e.stopPropagation()
+			
+			mask_dom.remove()
+			
+		})
 		mask_dom.classList.add("mask_view")
 		mask_dom.classList.add("cover_view")
 		mask_dom.classList.add("animated")
